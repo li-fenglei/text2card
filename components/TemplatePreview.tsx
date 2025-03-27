@@ -15,6 +15,8 @@ interface TemplatePreviewProps {
         footer: string;
         subfooter: string;
         avatarUrl: string;
+        qrType: 'qrcode' | 'image';
+        qrValue: string;
     };
 }
 
@@ -142,7 +144,20 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                                         {formData.subfooter}
                                     </div>
                                 </div>
-                                <QRCodeSVG value="https://example.com" size={64} />
+                                {formData.qrValue && (
+                                    formData.qrType === 'qrcode' ? (
+                                        <QRCodeSVG value={formData.qrValue} size={64} />
+                                    ) : (
+                                        <img 
+                                            src={formData.qrValue} 
+                                            alt="二维码图片" 
+                                            width={64} 
+                                            height={64} 
+                                            className="rounded-md"
+                                        />
+                                    )
+                                )}
+                                
                             </div>
                         </div>
                     </div>
