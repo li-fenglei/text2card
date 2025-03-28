@@ -1,6 +1,6 @@
 # text2card
 
-text2card 是一个简洁的文字卡片生成工具，可以将文字内容制作成一张漂亮的文字卡片，并导出为图片。
+text2card 是一个简洁的文字卡片生成工具，可以将文字内容制作成一张漂亮的文字卡片，可以自定义头像、标题、底部文字、链接二维码和图片链接，并导出为图片，然后你可以分享到社交媒体平台。
 
 ## 在线地址
 
@@ -10,7 +10,7 @@ text2card 是一个简洁的文字卡片生成工具，可以将文字内容制�
 
 ![预览](public/images/preview.png)
 
-![导出结果](public/images/output.png)
+![导出结果](public/images/output-small.png)
 
 ## 功能特点
 
