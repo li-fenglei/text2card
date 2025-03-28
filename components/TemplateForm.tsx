@@ -10,7 +10,7 @@ import TemplatePreview from "@/components/TemplatePreview";
 
 export default function TemplateForm() {
     const [formData, setFormData] = useState({
-        title: "做个垃圾然后发出去!",
+        title: "先做个垃圾出来!",
         content: "小宇宙注册了两年、话筒买了一年，一个音频都没发出去...\n\n今天终于把昨天的录音当作第一份小宇宙发了。\n\n以前一直在想，我要先去学习剪辑，再去找一些好听的音频，开场白一定要打动人，背景音乐的过度一定要自然，普通话应该要清晰....\n\n这些都是不去做的借口罢了",
         footer: "搬砖写作、烟火日常",
         subfooter: "欢迎扫码加我微信好友",
