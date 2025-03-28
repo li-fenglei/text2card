@@ -111,7 +111,7 @@ export default function TemplateForm() {
                         </Label>
                         <Input
                             id="qrValue"
-                            name="qrValue"
+                            name={formData.qrType === "qrcode" ? "qrCodeValue" : "imageValue"}
                             value={formData.qrType === "qrcode" ? formData.qrCodeValue : formData.imageValue}
                             onChange={handleChange}
                             placeholder={formData.qrType === "qrcode"
