@@ -2,6 +2,10 @@
 
 text2card 是一个简洁的文字卡片生成工具，可以将文字内容制作成一张漂亮的文字卡片，并导出为图片。
 
+## 在线地址
+
+[https://text2card2share.vercel.app/](https://text2card2share.vercel.app/)
+
 ## 效果展示
 
 ![预览](public/images/preview.png)
@@ -61,13 +65,13 @@ npx shadcn@latest add radio-group
 
 ## 欢迎扫码加我微信
 
-![微信](https://github.com/li-fenglei/donate-me/blob/main/contact-ray.png?raw=true)
+![微信](https://github.com/li-fenglei/profile/blob/main/contact-ray.png?raw=true)
 
 ## 请我喝杯咖啡
 
 如果觉得这个项目对你有帮助，请我喝杯咖啡吧！
 
-![捐赠](https://github.com/li-fenglei/donate-me/blob/main/joined-pay.png?raw=true)
+![捐赠](https://github.com/li-fenglei/profile/blob/main/joined-pay.png?raw=true)
 
 ## 许可证
 

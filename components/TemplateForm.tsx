@@ -13,10 +13,11 @@ export default function TemplateForm() {
         title: "做个垃圾然后发出去!",
         content: "小宇宙注册了两年、话筒买了一年，一个音频都没发出去...\n\n今天终于把昨天的录音当作第一份小宇宙发了。\n\n以前一直在想，我要先去学习剪辑，再去找一些好听的音频，开场白一定要打动人，背景音乐的过度一定要自然，普通话应该要清晰....\n\n这些都是不去做的借口罢了",
         footer: "搬砖写作、烟火日常",
-        subfooter: "扫码加我微信好友",
+        subfooter: "欢迎扫码加我微信好友",
         avatarUrl: "/avatar.png",
-        qrType: "qrcode" as "qrcode" | "image",
-        qrValue: "https://example.com",
+        qrType: "image" as "qrcode" | "image",
+        qrCodeValue: "https://github.com/li-fenglei/profile/blob/main/contact.png?raw=true",
+        imageValue: "images/contact-ray.png",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -87,33 +88,34 @@ export default function TemplateForm() {
 
                     <div className="space-y-2">
                         <Label>二维码类型</Label>
-                        <RadioGroup 
-                            value={formData.qrType} 
+                        <RadioGroup
+                            value={formData.qrType}
                             onValueChange={handleRadioChange}
                             className="flex space-x-4"
                         >
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="qrcode" id="qrcode" />
-                                <Label htmlFor="qrcode">生成二维码</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="image" id="image" />
                                 <Label htmlFor="image">图片链接</Label>
                             </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="qrcode" id="qrcode" />
+                                <Label htmlFor="qrcode">URL</Label>
+                            </div>
+
                         </RadioGroup>
                     </div>
 
                     <div>
                         <Label htmlFor="qrValue">
-                            {formData.qrType === "qrcode" ? "二维码链接" : "二维码图片URL"}
+                            {formData.qrType === "qrcode" ? "URL" : "图片链接"}
                         </Label>
                         <Input
                             id="qrValue"
                             name="qrValue"
-                            value={formData.qrValue}
+                            value={formData.qrType === "qrcode" ? formData.qrCodeValue : formData.imageValue}
                             onChange={handleChange}
-                            placeholder={formData.qrType === "qrcode" 
-                                ? "输入要生成二维码的链接" 
+                            placeholder={formData.qrType === "qrcode"
+                                ? "输入要生成二维码的链接"
                                 : "输入二维码图片的URL"}
                         />
                     </div>
