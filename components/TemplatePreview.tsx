@@ -140,13 +140,17 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                         <div className="mt-8 pt-4 border-t border-gray-200">
                             <div className="flex justify-between items-center">
                                 <div className="flex flex-col">
-                                    <div className="text-gray-600 font-bold">{formData.footer}</div>
-                                    <div className="text-xs text-gray-500 font-light mt-0.5">
+                                    <div className="text-gray-500 font-bold">{formData.footer}</div>
+                                    <div className="text-xs text-gray-500 font-light mt-1">
                                         {formData.subfooter}
                                     </div>
                                 </div>
                                 {(formData.qrType === 'qrcode' && formData.qrCodeValue) ? (
-                                    <QRCodeSVG value={formData.qrCodeValue} size={64} />
+                                    <QRCodeSVG
+                                        value={formData.qrCodeValue}
+                                        size={64}
+                                        fgColor="#6b7280"
+                                    />
                                 ) : (formData.qrType === 'image' && formData.imageValue) ? (
                                     <img
                                         src={formData.imageValue}
@@ -154,6 +158,7 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                                         width={64}
                                         height={64}
                                         className="rounded-md"
+                                        style={{ filter: 'grayscale(100%) opacity(80%)' }}
                                     />
                                 ) : null}
                             </div>
