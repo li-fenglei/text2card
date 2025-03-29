@@ -24,66 +24,41 @@ interface TemplatePreviewProps {
 export default function TemplatePreview({ formData }: TemplatePreviewProps) {
     const templateRef = useRef<HTMLDivElement>(null);
 
-    const handleExport = async () => {
+    const handleExport = async (scale: number = 1) => {
         if (!templateRef.current) return;
 
         try {
-            // 创建一个克隆元素以避免修改原始DOM
-            const clone = templateRef.current.cloneNode(true) as HTMLElement;
-            document.body.appendChild(clone);
-
-            // 设置克隆元素的样式，使其不可见但仍可渲染
-            clone.style.position = 'absolute';
-            clone.style.left = '-9999px';
-            clone.style.top = '-9999px';
-
-            // 明确设置背景色为标准RGB格式
-            clone.style.background = "linear-gradient(to bottom, #a7f3d0, #bae6fd)";
-
-            // 将所有样式转换为内联样式，避免oklch颜色
-            const convertStyles = (element: HTMLElement) => {
-                const style = window.getComputedStyle(element);
-
-                // 设置基本样式
-                element.style.color = style.color.includes('oklch') ? '#1f2937' : style.color;
-                element.style.backgroundColor = style.backgroundColor.includes('oklch') ? 'transparent' : style.backgroundColor;
-                element.style.borderColor = style.borderColor.includes('oklch') ? '#e5e7eb' : style.borderColor;
-                element.style.borderWidth = style.borderWidth;
-                element.style.borderStyle = style.borderStyle;
-                element.style.borderRadius = style.borderRadius;
-                element.style.padding = style.padding;
-                element.style.margin = style.margin;
-                element.style.fontFamily = style.fontFamily;
-                element.style.fontSize = style.fontSize;
-                element.style.fontWeight = style.fontWeight;
-                element.style.textAlign = style.textAlign;
-
-                // 处理子元素
-                Array.from(element.children).forEach(child => {
-                    if (child instanceof HTMLElement) {
-                        convertStyles(child);
-                    }
-                });
-            };
-
-            // 应用样式转换
-            convertStyles(clone);
-
-            // 使用html2canvas-pro
-            const canvas = await html2canvas(clone, {
-                scale: 2,
+            // 创建一个临时的canvas元素
+            const tempCanvas = document.createElement('canvas');
+            const ctx = tempCanvas.getContext('2d');
+            
+            // 先用html2canvas渲染原始尺寸
+            const originalCanvas = await html2canvas(templateRef.current, {
+                scale: 2, // 保持原有的2倍基准
                 useCORS: true,
                 allowTaint: true,
-                backgroundColor: null
+                backgroundColor: null,
+                logging: false
             });
-
-            // 移除克隆元素
-            document.body.removeChild(clone);
-
-            const image = canvas.toDataURL("image/png");
+            
+            // 根据缩放比例设置临时canvas的尺寸
+            tempCanvas.width = originalCanvas.width * scale;
+            tempCanvas.height = originalCanvas.height * scale;
+            
+            // 在临时canvas上绘制缩放后的图像
+            if (ctx) {
+                ctx.drawImage(
+                    originalCanvas, 
+                    0, 0, originalCanvas.width, originalCanvas.height,
+                    0, 0, tempCanvas.width, tempCanvas.height
+                );
+            }
+            
+            // 从临时canvas获取图像数据
+            const image = tempCanvas.toDataURL("image/png");
             const link = document.createElement("a");
             link.href = image;
-            link.download = "template.png";
+            link.download = `template${scale !== 1 ? `_${scale}x` : ""}.png`;
             link.click();
         } catch (error) {
             console.error("导出图片时:", error);
@@ -166,12 +141,20 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                     </div>
                 </div>
 
-                <Button
-                    onClick={handleExport}
-                    className="w-full mt-4"
-                >
-                    导出图片
-                </Button>
+                <div className="flex gap-4 mt-4">
+                    <Button
+                        onClick={() => handleExport(0.5)}
+                        className="flex-1"
+                    >
+                        导出 0.5x 图片
+                    </Button>
+                    <Button
+                        onClick={() => handleExport(1)}
+                        className="flex-1"
+                    >
+                        导出 1x 图片
+                    </Button>
+                </div>
             </Card>
         </div>
     );
