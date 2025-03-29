@@ -96,12 +96,13 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                 <h2 className="text-2xl font-bold mb-4">预览</h2>
 
                 {isMobile ? (
-                    // 手机端样式 - 类似您分享的图片
+                    // 手机端样式
                     <div
                         ref={templateRef}
                         className="w-full rounded-xl overflow-hidden"
                         style={{
-                            backgroundColor: "#bae6fd",
+                            backgroundColor: "#F5F5F5",
+                            // backgroundColor: "#F5FFFA",
                             padding: "1rem",
                             maxWidth: "100%"
                         }}
@@ -158,7 +159,7 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                         </div>
                     </div>
                 ) : (
-                    // PC端样式 - 保持原有样式
+                    // PC端样式
                     <div
                         ref={templateRef}
                         className="w-full max-w-sm mx-auto rounded-xl overflow-hidden"
