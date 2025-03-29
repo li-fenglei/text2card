@@ -81,6 +81,64 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
         }
     };
 
+    const handleExportNoQR = async (scale: number = 1) => {
+        if (!templateRef.current) return;
+
+        try {
+            // 找到二维码元素
+            const qrElements = templateRef.current.querySelectorAll('.qr-code-container');
+            const originalDisplays = Array.from(qrElements).map(el => 
+                (el as HTMLElement).style.display
+            );
+            
+            // 临时隐藏二维码
+            qrElements.forEach(el => {
+                (el as HTMLElement).style.display = 'none';
+            });
+            
+            // 创建一个临时的canvas元素
+            const tempCanvas = document.createElement('canvas');
+            const ctx = tempCanvas.getContext('2d');
+            
+            // 先用html2canvas渲染原始尺寸
+            const originalCanvas = await html2canvas(templateRef.current, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null,
+                logging: false
+            });
+            
+            // 恢复二维码显示
+            qrElements.forEach((el, index) => {
+                (el as HTMLElement).style.display = originalDisplays[index];
+            });
+            
+            // 根据缩放比例设置临时canvas的尺寸
+            tempCanvas.width = originalCanvas.width * scale;
+            tempCanvas.height = originalCanvas.height * scale;
+            
+            // 在临时canvas上绘制缩放后的图像
+            if (ctx) {
+                ctx.drawImage(
+                    originalCanvas, 
+                    0, 0, originalCanvas.width, originalCanvas.height,
+                    0, 0, tempCanvas.width, tempCanvas.height
+                );
+            }
+            
+            // 从临时canvas获取图像数据
+            const image = tempCanvas.toDataURL("image/png");
+            const link = document.createElement("a");
+            link.href = image;
+            link.download = `template_no_qr${scale !== 1 ? `_${scale}x` : ""}.png`;
+            link.click();
+        } catch (error) {
+            console.error("导出无二维码图片时:", error);
+            alert("导出图片失败，请稍后再试");
+        }
+    };
+
     const currentDate = format(
         new Date(),
         "yyyy年M月d日 a h点mm分",
@@ -122,7 +180,12 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                             {formData.title}
                         </h1>
                         
-                        <div className="space-y-3 text-gray-800 text-sm">
+                        <div className="space-y-4 text-gray-800 text-sm" 
+                             style={{ 
+                                 fontFamily: "'宋体', SimSun, '新宋体', NSimSun, serif",
+                                 fontSize: '0.85rem',  // 明确设置字体大小
+                                 lineHeight: '1.4'      // 设置行高
+                             }}>
                             {contentParagraphs.map((paragraph, index) => (
                                 <p key={index}>{paragraph}</p>
                             ))}
@@ -141,19 +204,23 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                                     </div>
                                 </div>
                                 {(formData.qrType === 'qrcode' && formData.qrCodeValue) ? (
-                                    <QRCodeSVG
-                                        value={formData.qrCodeValue}
-                                        size={64}
-                                        fgColor="#4b5563"
-                                    />
+                                    <div className="qr-code-container">
+                                        <QRCodeSVG
+                                            value={formData.qrCodeValue}
+                                            size={64}
+                                            fgColor="#4b5563"
+                                        />
+                                    </div>
                                 ) : (formData.qrType === 'image' && formData.imageValue) ? (
-                                    <img
-                                        src={formData.imageValue}
-                                        alt="二维码图片"
-                                        width={64}
-                                        height={64}
-                                        className="rounded-md"
-                                    />
+                                    <div className="qr-code-container">
+                                        <img
+                                            src={formData.imageValue}
+                                            alt="二维码图片"
+                                            width={64}
+                                            height={64}
+                                            className="rounded-md"
+                                        />
+                                    </div>
                                 ) : null}
                             </div>
                         </div>
@@ -209,20 +276,24 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                                         </div>
                                     </div>
                                     {(formData.qrType === 'qrcode' && formData.qrCodeValue) ? (
-                                        <QRCodeSVG
-                                            value={formData.qrCodeValue}
-                                            size={64}
-                                            fgColor="#6b7280"
-                                        />
+                                        <div className="qr-code-container">
+                                            <QRCodeSVG
+                                                value={formData.qrCodeValue}
+                                                size={64}
+                                                fgColor="#6b7280"
+                                            />
+                                        </div>
                                     ) : (formData.qrType === 'image' && formData.imageValue) ? (
-                                        <img
-                                            src={formData.imageValue}
-                                            alt="二维码图片"
-                                            width={64}
-                                            height={64}
-                                            className="rounded-md"
-                                            style={{ filter: 'grayscale(100%) opacity(80%)' }}
-                                        />
+                                        <div className="qr-code-container">
+                                            <img
+                                                src={formData.imageValue}
+                                                alt="二维码图片"
+                                                width={64}
+                                                height={64}
+                                                className="rounded-md"
+                                                style={{ filter: 'grayscale(100%) opacity(80%)' }}
+                                            />
+                                        </div>
                                     ) : null}
                                 </div>
                             </div>
@@ -242,6 +313,12 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                         className="flex-1 min-w-[120px]"
                     >
                         导出 1x 图片
+                    </Button>
+                    <Button
+                        onClick={() => handleExportNoQR(1)}
+                        className="flex-1 min-w-[120px]"
+                    >
+                        导出无二维码版本
                     </Button>
                 </div>
             </Card>
