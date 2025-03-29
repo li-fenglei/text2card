@@ -86,6 +86,8 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                     style={{
                         background: "linear-gradient(to bottom, #a7f3d0, #bae6fd)",
                         padding: "1.5rem",
+                        maxWidth: "100%",
+                        width: "360px",
                     }}
                 >
                     <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg">
@@ -100,9 +102,15 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                             <span className="text-gray-500 text-sm font-light">{currentDate}</span>
                         </div>
 
-                        <h1 className="text-2xl font-medium mt-4 mb-6">{formData.title}</h1>
-
-                        <div className="space-y-4 text-gray-900" style={{ fontFamily: "'宋体', SimSun, '新宋体', NSimSun, serif" }}>
+                        <h1 className="font-medium mt-4 mb-6" 
+                            style={{ 
+                                fontSize: '1rem',
+                                lineHeight: '1.4'
+                            }}
+                        >
+                            {formData.title}
+                        </h1>
+                        <div className="space-y-4 text-gray-900 text-sm" style={{ fontFamily: "'宋体', SimSun, '新宋体', NSimSun, serif" }}>
                             {contentParagraphs.map((paragraph, index) => (
                                 <p key={index}>{paragraph}</p>
                             ))}
@@ -141,16 +149,16 @@ export default function TemplatePreview({ formData }: TemplatePreviewProps) {
                     </div>
                 </div>
 
-                <div className="flex gap-4 mt-4">
+                <div className="flex flex-wrap gap-4 mt-4">
                     <Button
                         onClick={() => handleExport(0.5)}
-                        className="flex-1"
+                        className="flex-1 min-w-[120px]"
                     >
                         导出 0.5x 图片
                     </Button>
                     <Button
                         onClick={() => handleExport(1)}
-                        className="flex-1"
+                        className="flex-1 min-w-[120px]"
                     >
                         导出 1x 图片
                     </Button>
